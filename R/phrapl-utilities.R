@@ -1430,7 +1430,16 @@ outgroup=TRUE,outgroupPrune=TRUE){
 		newphyVector<-list()
 		for (rep in 1:subsamplesPerGene) {
 			keepTaxa<-TaxaToRetain(assignFrame,nIndividualsDesired,minPerPop,attemptsCutoff=100000,popAssignments[[1]]) #subsample assignFrame
+			# TOMMASO: These two lines have been added to fix the following error:
+			## Error in retainedTaxaMatrix[rep, ] <- keepTaxa : number of items to replace is not a multiple of replacement length
+			## https://github.com/bomeara/phrapl/issues/18
+			add2 <- sample(assignFrame$indivTotal[!assignFrame$indivTotal %in% keepTaxa], 2)
+			keepTaxa <- sort(append(keepTaxa, add2))
+			# end insert for UCE fix
 			retainedTaxaMatrix[rep,]<-keepTaxa
+			# This line was also added to fix the UCE issues
+			if (all(!is.na(retainedTaxaMatrix))) { break }
+			
 			prunedAF<-PrunedAssignFrame(assignFrame,keepTaxa)
 			delTaxa<-TaxaToDrop(assignFrame,keepTaxa)
 			newphy<-drop.tip(phy[[tree]],as.character(delTaxa)) #toss non-sampled individuals from the tree

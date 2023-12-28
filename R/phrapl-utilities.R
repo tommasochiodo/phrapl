@@ -1438,7 +1438,7 @@ outgroup=TRUE,outgroupPrune=TRUE){
 			# end insert for UCE fix
 			retainedTaxaMatrix[rep,]<-keepTaxa
 			# This line was also added to fix the UCE issues
-			if (all(!is.na(retainedTaxaMatrix))) { break }
+			# if (all(!is.na(retainedTaxaMatrix))) { break }
 			
 			prunedAF<-PrunedAssignFrame(assignFrame,keepTaxa)
 			delTaxa<-TaxaToDrop(assignFrame,keepTaxa)
